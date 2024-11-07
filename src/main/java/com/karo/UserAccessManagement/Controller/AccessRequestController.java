@@ -3,7 +3,8 @@ package com.karo.UserAccessManagement.Controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
+import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,7 @@ public class AccessRequestController {
     public ResponseEntity<AccessRequestResponseDto> createRequest(
             @RequestBody AccessRequestDto requestDto,
             Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getUsername());
+        User user = userService.getUserByUsername(authentication.getName());
         Software software = softwareService.getSoftwareById(requestDto.getSoftwareId());
         AccessRequest request = accessRequestService.createRequest(requestDto, user, software);
         return ResponseEntity.ok(mapToAccessRequestResponseDto(request));
@@ -53,9 +54,14 @@ public class AccessRequestController {
             @PathVariable Long requestId,
             @RequestParam RequestStatus status,
             Authentication authentication) {
-        User manager = userService.getUserByUsername(authentication.getName());
-        AccessRequest request = accessRequestService.processRequest(requestId, status, manager);
-        return ResponseEntity.ok(mapToAccessRequestResponseDto(request));
+       try {
+            User manager = userService.getUserByUsername(authentication.getName());
+            AccessRequest request = accessRequestService.processRequest(requestId, status, manager);
+            return ResponseEntity.ok(mapToAccessRequestResponseDto(request));
+       } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+       }
+                
     }
 
 

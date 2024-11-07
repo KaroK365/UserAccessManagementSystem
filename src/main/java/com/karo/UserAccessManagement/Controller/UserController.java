@@ -1,6 +1,6 @@
 package com.karo.UserAccessManagement.Controller;
 
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +29,7 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getCurrentUser(Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getUsername());
+        User user = userService.getUserByUsername(authentication.getName());
         return ResponseEntity.ok(mapToUserResponseDto(user));
     }
 
