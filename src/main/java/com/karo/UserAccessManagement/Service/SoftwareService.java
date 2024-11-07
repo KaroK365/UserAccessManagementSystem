@@ -1,7 +1,4 @@
 package com.karo.UserAccessManagement.Service;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.karo.UserAccessManagement.Entity.Software;
