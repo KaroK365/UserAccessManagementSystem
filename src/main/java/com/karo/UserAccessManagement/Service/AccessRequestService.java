@@ -3,6 +3,7 @@ package com.karo.UserAccessManagement.Service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.karo.UserAccessManagement.Entity.AccessRequest;
 import com.karo.UserAccessManagement.Entity.Software;
@@ -22,6 +23,7 @@ public class AccessRequestService {
     private final AccessRequestRepository accessRequestRepository;
     private final ValidationUtil validationUtil;
 
+    @Transactional
     public AccessRequest createRequest(AccessRequestDto requestDto, User user, Software software) {
         validationUtil.validateAccessRequest(requestDto, software);
         AccessRequest request = new AccessRequest();
@@ -33,6 +35,7 @@ public class AccessRequestService {
         return accessRequestRepository.save(request);
     }
 
+    @Transactional
     public AccessRequest processRequest(Long requestId, RequestStatus status, User manager) throws Exception {
         AccessRequest request = accessRequestRepository.findById(requestId)
                 .orElseThrow(() -> new ResourceNotFoundException("Access request not found"));

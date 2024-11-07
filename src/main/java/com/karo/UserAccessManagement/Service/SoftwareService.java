@@ -17,7 +17,7 @@ public class SoftwareService {
     public Software createSoftware(SoftwareCreationDto softwareDto){
         Software software = new Software();
         software.setName(softwareDto.getName());
-        software.setDescription(softwareDto.getName());
+        software.setDescription(softwareDto.getDescription());
         software.setAccessLevels(softwareDto.getAccessLevels());
         return  softwareRepository.save(software);
     }
