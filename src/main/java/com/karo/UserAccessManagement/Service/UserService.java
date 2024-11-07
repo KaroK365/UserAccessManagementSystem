@@ -19,17 +19,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public ResponseEntity<User> registerUser(UserRegistrationDto registrationDto){
+    public User registerUser(UserRegistrationDto registrationDto){
         User user = new User();
         user.setUsername(registrationDto.getUsername());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
         user.setRole(UserRole.EMPLOYEE);
-
-        try {
-            User savedUser =  userRepository.save(user);
-            return new ResponseEntity<>(savedUser,HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return userRepository.save(user);
     }
 }

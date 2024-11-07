@@ -16,18 +16,12 @@ public class SoftwareService {
 
     private final SoftwareRepository softwareRepository;
     
-    public ResponseEntity<Software> createSoftware(SoftwareCreationDto softwareDto){
+    public Software createSoftware(SoftwareCreationDto softwareDto){
         Software software = new Software();
         software.setName(softwareDto.getName());
         software.setDescription(softwareDto.getName());
         software.setAccessLevels(softwareDto.getAccessLevels());
-
-        try {
-            Software savedSoftware = softwareRepository.save(software);
-            return new ResponseEntity<>(savedSoftware,HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return  softwareRepository.save(software);
     }
 
 }
