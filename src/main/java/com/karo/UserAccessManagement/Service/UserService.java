@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.karo.UserAccessManagement.Entity.User;
 import com.karo.UserAccessManagement.Enums.UserRole;
+import com.karo.UserAccessManagement.Exception.ResourceNotFoundException;
 import com.karo.UserAccessManagement.Repository.UserRepository;
 import com.karo.UserAccessManagement.dto.UserRegistrationDto;
 
@@ -23,5 +24,10 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
         user.setRole(UserRole.EMPLOYEE);
         return userRepository.save(user);
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

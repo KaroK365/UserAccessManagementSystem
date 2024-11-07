@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.karo.UserAccessManagement.Entity.Software;
 import com.karo.UserAccessManagement.Service.SoftwareService;
 import com.karo.UserAccessManagement.dto.SoftwareCreationDto;
+import com.karo.UserAccessManagement.dto.response.SoftwareResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +22,17 @@ public class SoftwareController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Software> createSoftwate(@RequestBody SoftwareCreationDto softwareDto){
-        return ResponseEntity.ok(softwareService.createSoftware(softwareDto));
+    public ResponseEntity<SoftwareResponseDto> createSoftware(@RequestBody SoftwareCreationDto softwareDto) {
+        Software software = softwareService.createSoftware(softwareDto);
+        return ResponseEntity.ok(mapToSoftwareResponseDto(software));
+    }
+
+    private SoftwareResponseDto mapToSoftwareResponseDto(Software software) {
+        SoftwareResponseDto dto = new SoftwareResponseDto();
+        dto.setId(software.getId());
+        dto.setName(software.getName());
+        dto.setDescription(software.getDescription());
+        dto.setAccessLevels(software.getAccessLevels());
+        return dto;
     }
 }
